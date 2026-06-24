@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ScholarSync</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+        .auth-container {
+            display: flex; width: 100%; max-width: 1000px; min-height: 580px;
+            background: #fff; border-radius: 16px; box-shadow: 0 4px 40px rgba(0,0,0,.06);
+            overflow: hidden; margin: 20px;
+        }
+        .auth-left {
+            flex: 1; background: linear-gradient(135deg, #FF642D, #cc4a1a);
+            padding: 48px; display: flex; flex-direction: column; justify-content: center; color: #fff;
+        }
+        .auth-left .logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; margin-bottom: 40px; }
+        .auth-left .logo svg { width: 32px; height: 32px; }
+        .auth-left h2 { font-size: 32px; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+        .auth-left p { font-size: 15px; opacity: .85; line-height: 1.7; margin-bottom: 32px; }
+        .demo-box {
+            background: rgba(255,255,255,.12); border-radius: 10px; padding: 16px; backdrop-filter: blur(10px);
+        }
+        .demo-box h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .5px; opacity: .8; margin-bottom: 8px; }
+        .demo-cred { font-size: 14px; margin: 4px 0; }
+        .demo-cred strong { font-weight: 600; }
+
+        .auth-right {
+            flex: 1; padding: 48px; display: flex; flex-direction: column; justify-content: center;
+        }
+        .auth-right h2 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+        .auth-right .sub { color: #64748b; font-size: 15px; margin-bottom: 32px; }
+        .auth-right .sub a { color: #FF642D; text-decoration: none; font-weight: 500; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
+        .form-group input {
+            width: 100%; padding: 12px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
+            font-size: 14px; font-family: inherit; transition: border-color .2s; outline: none;
+        }
+        .form-group input:focus { border-color: #FF642D; box-shadow: 0 0 0 3px rgba(255,100,45,.1); }
+
+        .btn {
+            width: 100%; padding: 13px; background: #FF642D; color: #fff; border: none;
+            border-radius: 8px; font-size: 15px; font-weight: 600; font-family: inherit;
+            cursor: pointer; transition: background .2s;
+        }
+        .btn:hover { background: #e5571f; }
+        .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+        .error-msg {
+            background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 10px 14px;
+            border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none;
+        }
+        .error-msg.show { display: block; }
+
+        .back-link { text-align: center; margin-top: 24px; }
+        .back-link a { color: #64748b; text-decoration: none; font-size: 13px; }
+        .back-link a:hover { color: #FF642D; }
+
+        @media (max-width: 768px) {
+            .auth-left { display: none; }
+            .auth-container { max-width: 440px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-left">
+            <div class="logo">
+                <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#fff"/><path d="M8 22V10l8-4 8 4v12l-8 4-8-4z" fill="#FF642D" opacity=".9"/><path d="M16 14v8m-4-6l4 2 4-2" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+                ScholarSync
+            </div>
+            <h2>Welcome back to your school dashboard</h2>
+            <p>Access student records, manage fees, track attendance, and run your school operations from a single unified platform.</p>
+            <div class="demo-box">
+                <h4>Demo Credentials</h4>
+                <div class="demo-cred"><strong>Email:</strong> admin@school.com</div>
+                <div class="demo-cred"><strong>Password:</strong> admin123</div>
+            </div>
+        </div>
+        <div class="auth-right">
+            <h2>Sign in</h2>
+            <p class="sub">Don't have an account? <a href="/signup.html">Create one</a></p>
+            <div class="error-msg" id="errorMsg"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="admin@school.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn" id="submitBtn">Sign In</button>
+            </form>
+            <div class="back-link"><a href="/">&larr; Back to home</a></div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('errorMsg');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Redirect if already logged in
+        const token = localStorage.getItem('scholar_token');
+        if (token) {
+            fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } })
+                .then(r => { if (r.ok) window.location.href = '/dashboard.html'; })
+                .catch(() => {});
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMsg.classList.remove('show');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || data.message || 'Login failed');
+                localStorage.setItem('scholar_token', data.token);
+                if (data.user) localStorage.setItem('scholar_user', JSON.stringify(data.user));
+                window.location.href = '/dashboard.html';
+            } catch (err) {
+                errorMsg.textContent = err.message;
+                errorMsg.classList.add('show');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
+            }
+        });
+    </script>
+</body>
+</html>

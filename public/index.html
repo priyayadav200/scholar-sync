@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScholarSync - School Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #fff; color: #1e293b; }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 48px; border-bottom: 1px solid #e2e8f0;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; color: #FF642D; text-decoration: none; }
+        .logo svg { width: 32px; height: 32px; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #64748b; font-weight: 500; font-size: 15px; transition: color .2s; }
+        .nav-links a:hover { color: #FF642D; }
+        .btn { padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; transition: all .2s; border: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-outline { border: 1.5px solid #FF642D; color: #FF642D; background: transparent; }
+        .btn-outline:hover { background: #FF642D; color: #fff; }
+        .btn-primary { background: #FF642D; color: #fff; }
+        .btn-primary:hover { background: #e5571f; }
+        .btn-lg { padding: 14px 32px; font-size: 16px; border-radius: 10px; }
+
+        .hero {
+            display: flex; align-items: center; justify-content: center;
+            min-height: calc(100vh - 160px); padding: 60px 48px; gap: 80px;
+        }
+        .hero-text { max-width: 560px; }
+        .hero-text .badge { display: inline-block; background: #fff7f4; color: #FF642D; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-bottom: 20px; }
+        .hero-text h1 { font-size: 52px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; color: #0f172a; }
+        .hero-text h1 span { color: #FF642D; }
+        .hero-text p { font-size: 18px; line-height: 1.7; color: #64748b; margin-bottom: 36px; }
+        .hero-actions { display: flex; gap: 16px; }
+
+        .hero-visual {
+            width: 480px; height: 380px; background: linear-gradient(135deg, #fff7f4, #fff0eb);
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .hero-visual .card {
+            background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 24px rgba(255,100,45,.12);
+            position: absolute;
+        }
+        .hero-visual .card-1 { top: 30px; left: 30px; width: 200px; }
+        .hero-visual .card-2 { bottom: 40px; right: 30px; width: 220px; }
+        .hero-visual .card-3 { top: 50%; left: 50%; transform: translate(-50%,-50%); width: 180px; }
+        .stat-row { display: flex; justify-content: space-between; margin-top: 8px; }
+        .stat-val { font-size: 24px; font-weight: 700; color: #FF642D; }
+        .stat-label { font-size: 11px; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+        .card-title { font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 4px; }
+        .mini-bar { height: 6px; border-radius: 3px; background: #e2e8f0; margin-top: 6px; }
+        .mini-bar-fill { height: 100%; border-radius: 3px; background: #FF642D; }
+
+        .features {
+            padding: 80px 48px; background: #f8fafc;
+        }
+        .features h2 { text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 12px; }
+        .features .sub { text-align: center; color: #64748b; font-size: 16px; margin-bottom: 48px; }
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px; max-width: 1100px; margin: 0 auto;
+        }
+        .feature-card {
+            background: #fff; border-radius: 12px; padding: 28px; border: 1px solid #e2e8f0;
+            transition: box-shadow .2s, transform .2s;
+        }
+        .feature-card:hover { box-shadow: 0 8px 30px rgba(255,100,45,.1); transform: translateY(-2px); }
+        .feature-icon {
+            width: 44px; height: 44px; border-radius: 10px; background: #fff7f4;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+            color: #FF642D; font-size: 20px;
+        }
+        .feature-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+        .feature-card p { font-size: 14px; color: #64748b; line-height: 1.6; }
+
+        .footer {
+            padding: 32px 48px; border-top: 1px solid #e2e8f0; text-align: center;
+            color: #94a3b8; font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; padding: 40px 24px; gap: 40px; }
+            .hero-text h1 { font-size: 36px; }
+            .hero-visual { width: 100%; max-width: 400px; height: 280px; }
+            .navbar { padding: 16px 24px; }
+            .features { padding: 48px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#FF642D"/><path d="M8 22V10l8-4 8 4v12l-8 4-8-4z" fill="#fff" opacity=".9"/><path d="M16 14v8m-4-6l4 2 4-2" stroke="#FF642D" stroke-width="1.5" stroke-linecap="round"/></svg>
+            ScholarSync
+        </a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="/login.html" class="btn btn-outline">Log In</a>
+            <a href="/signup.html" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-text">
+            <div class="badge">Trusted by 500+ Schools</div>
+            <h1>Smart School Management, <span>Simplified.</span></h1>
+            <p>ScholarSync brings together students, teachers, fees, attendance, exams, and more into one unified platform. Run your school efficiently from anywhere.</p>
+            <div class="hero-actions">
+                <a href="/signup.html" class="btn btn-primary btn-lg">Start Free Trial</a>
+                <a href="/login.html" class="btn btn-outline btn-lg">Demo Login</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="card card-1">
+                <div class="card-title">Total Students</div>
+                <div class="stat-val">1,247</div>
+                <div class="mini-bar"><div class="mini-bar-fill" style="width:78%"></div></div>
+            </div>
+            <div class="card card-3">
+                <div class="card-title">Attendance</div>
+                <div class="stat-val">94.2%</div>
+                <div class="mini-bar"><div class="mini-bar-fill" style="width:94%"></div></div>
+            </div>
+            <div class="card card-2">
+                <div class="card-title">Fee Collection</div>
+                <div class="stat-row">
+                    <div><div class="stat-val">89%</div><div class="stat-label">Collected</div></div>
+                    <div><div class="stat-val" style="color:#f59e0b">11%</div><div class="stat-label">Pending</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2>Everything Your School Needs</h2>
+        <p class="sub">Comprehensive modules to manage every aspect of school operations</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F393;</div>
+                <h3>Student Management</h3>
+                <p>Complete student profiles, enrollment tracking, and academic history in one place.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4B0;</div>
+                <h3>Fee Collection</h3>
+                <p>Track payments, generate receipts, and manage pending dues with real-time status updates.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4CB;</div>
+                <h3>Attendance Tracking</h3>
+                <p>Mark daily attendance with one click. Track patterns and generate reports effortlessly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4DD;</div>
+                <h3>Exam & Marksheets</h3>
+                <p>Schedule exams, record marks, and generate comprehensive result sheets instantly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F468;&#x200D;&#x1F3EB;</div>
+                <h3>Teacher Portal</h3>
+                <p>Manage faculty profiles, assignments, leave requests, and class allocations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F3E0;</div>
+                <h3>Hostel Management</h3>
+                <p>Room allocation, mess management, and hostel fee tracking all integrated.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        &copy; 2026 ScholarSync. Built for modern schools.
+    </footer>
+
+    <script>
+        // If already logged in, redirect to dashboard
+        const token = localStorage.getItem('scholar_token');
+        if (token) {
+            fetch('/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } })
+                .then(r => { if (r.ok) window.location.href = '/dashboard.html'; })
+                .catch(() => {});
+        }
+    </script>
+</body>
+</html>
